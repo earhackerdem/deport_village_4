@@ -34,12 +34,16 @@ RUN docker-php-ext-install \
 # Instalar Redis extension
 RUN pecl install redis && docker-php-ext-enable redis
 
+# Instalar Xdebug para cobertura de código y debugging
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+
 # Configurar opcodes cache
 RUN docker-php-ext-install opcache
 
 # Copiar configuración personalizada de PHP
 COPY docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
 COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+COPY docker/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

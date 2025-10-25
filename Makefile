@@ -65,8 +65,11 @@ seed: ## Ejecutar seeders
 migrate-seed: ## Migrar y poblar
 	docker compose exec app php artisan migrate --seed
 
-test: ## Ejecutar tests
-	docker compose exec app php artisan test
+test-coverage: ## Ejecutar tests con cobertura de código
+	docker compose exec app php artisan test --coverage
+
+test: ## Ejecutar tests (usar ARGS para opciones: make test ARGS="--filter=NombreTest")
+	docker compose exec app php artisan test $(ARGS)
 
 pint: ## Ejecutar Laravel Pint (code styling)
 	docker compose exec app ./vendor/bin/pint

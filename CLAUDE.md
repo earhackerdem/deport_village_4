@@ -100,6 +100,7 @@ make migrate-seed               # Migrate and seed in one command
 
 # Testing
 make test                       # Run PHPUnit test suite
+make test-coverage              # Run tests with code coverage report
 make pint                       # Format code with Laravel Pint
 make pint-test                  # Check code style without modifying
 
@@ -118,28 +119,57 @@ make fresh-install              # build + up + migrate + seed
 
 ## Testing
 
-The project uses PHPUnit configured in `phpunit.xml`:
+The project uses PHPUnit configured in `phpunit.xml` with **Xdebug** enabled for code coverage analysis:
 
 - **Unit tests**: `tests/Unit/` - isolated tests
 - **Feature tests**: `tests/Feature/` - integration tests
 - Test database: In-memory SQLite (not the Docker MySQL)
-- Run tests: `make test` or `docker compose exec app php artisan test`
+- **Coverage tool**: Xdebug v3.4.6 (pre-configured for optimal performance)
 
-### Running Single Tests
+### Running Tests
 
 ```bash
+# Run all tests (basic)
+make test
+
+# Run all tests with code coverage report
+make test-coverage
+
+# Run tests with custom arguments
+make test ARGS="--filter=NombreTest"
+make test ARGS="--coverage --min=80"
+
 # Run specific test file
 make artisan test tests/Feature/ExampleTest.php
 
-# Run specific test method
-make artisan test --filter test_method_name
+# Alternative syntax for flags with --
+make -- artisan test --coverage
+make -- artisan test --parallel
+```
 
-# Run with coverage
-make artisan test --coverage
+### Code Coverage Examples
+
+```bash
+# Basic coverage report (shows percentage per file)
+make test-coverage
+
+# Coverage with minimum threshold (fails if below 80%)
+make test ARGS="--coverage --min=80"
+
+# Coverage for specific test suite
+make test ARGS="--coverage --testsuite=Feature"
 
 # Run tests in parallel
-make artisan test --parallel
+make test ARGS="--parallel"
 ```
+
+### Coverage Configuration
+
+The Docker environment includes:
+- **Xdebug mode**: `coverage` (optimized for test coverage)
+- **Config location**: `docker/php/xdebug.ini`
+- **Performance**: No impact on normal operations (only active during `--coverage`)
+- **Remote debugging**: Available (see `xdebug.ini` comments to enable for IDE debugging)
 
 ## Database & MySQL
 
@@ -550,3 +580,4 @@ make test-slow-query SECONDS=3
 Current branch: `main`
 
 When creating commits or pull requests, the base branch is `main`.
+- When updating @CLAUDE.md also update @README.md

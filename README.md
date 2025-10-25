@@ -17,7 +17,7 @@ Accede a:
 ## Stack Tecnológico
 
 - **Laravel**: 12.x
-- **PHP**: 8.3-FPM
+- **PHP**: 8.3-FPM con Xdebug 3.4.6 (code coverage)
 - **MySQL**: 8.4 LTS
 - **Redis**: 7 Alpine
 - **Nginx**: Latest Alpine
@@ -170,6 +170,7 @@ make migrate-fresh                  # Recrear BD y migrar
 make seed                           # Ejecutar seeders
 make migrate-seed                   # Migrar y poblar
 make test                           # Ejecutar tests
+make test-coverage                  # Ejecutar tests con cobertura de código
 make pint                           # Formatear código (Laravel Pint)
 make pint-test                      # Verificar código sin modificar
 ```
@@ -187,6 +188,15 @@ make optimize-clear  # Limpiar optimizaciones
 ```bash
 make queue-work      # Ejecutar queue worker
 make queue-listen    # Escuchar cola en tiempo real
+```
+
+### Testing con Cobertura de Código
+
+```bash
+make test                           # Ejecutar todos los tests
+make test-coverage                  # Ejecutar tests con reporte de cobertura
+make test ARGS="--filter=UserTest"  # Ejecutar test específico
+make test ARGS="--coverage --min=80" # Cobertura con umbral mínimo
 ```
 
 ### MySQL - Monitoreo de Queries Lentas
@@ -319,15 +329,69 @@ deport_village_4/
 │   │   └── default.conf        # Configuración Nginx
 │   └── php/
 │       ├── php.ini             # Configuración PHP
-│       └── opcache.ini         # Configuración OPcache
+│       ├── opcache.ini         # Configuración OPcache
+│       └── xdebug.ini          # Configuración Xdebug (code coverage)
 ├── storage/
 │   └── logs/
 │       └── mysql/              # Logs de MySQL (slow-query.log)
 ├── docker-compose.yml          # Definición de servicios Docker
-├── Dockerfile                  # Imagen PHP personalizada
+├── Dockerfile                  # Imagen PHP personalizada con Xdebug
 ├── docker-setup.sh             # Script de configuración automatizada
 ├── Makefile                    # Comandos útiles (usa docker compose v2)
+├── CLAUDE.md                   # Documentación para Claude Code
 └── README.md                   # Esta documentación
+```
+
+## Testing y Cobertura de Código
+
+El proyecto incluye **Xdebug 3.4.6** preconfigurado para análisis de cobertura de código sin impacto en el rendimiento.
+
+### Configuración de Xdebug
+
+La configuración está optimizada en `docker/php/xdebug.ini`:
+
+```ini
+; Modo de operación (solo cobertura por defecto)
+xdebug.mode=coverage
+
+; Sin impacto en performance cuando no se usa --coverage
+xdebug.show_error_trace=0
+xdebug.collect_params=0
+xdebug.collect_return=0
+```
+
+### Ejecutar Tests con Cobertura
+
+```bash
+# Cobertura básica (muestra porcentaje por archivo)
+make test-coverage
+
+# Cobertura con umbral mínimo
+make test ARGS="--coverage --min=80"
+
+# Cobertura para suite específica
+make test ARGS="--coverage --testsuite=Feature"
+
+# Tests sin cobertura (más rápidos)
+make test
+```
+
+### Habilitar Debugging Remoto (Opcional)
+
+Para usar Xdebug con tu IDE, descomenta en `docker/php/xdebug.ini`:
+
+```ini
+xdebug.mode=coverage,debug
+xdebug.client_host=host.docker.internal
+xdebug.client_port=9003
+xdebug.start_with_request=trigger
+```
+
+Luego reconstruye el contenedor:
+```bash
+make down
+make build
+make up
 ```
 
 ## Configuración de MySQL
