@@ -14,22 +14,22 @@ NEVER create files manually. Always use artisan commands.
 ## Mandatory Artisan Commands
 ```bash
 # Model + Migration
-php artisan make:model ModelName -m
+make artisan make:model ModelName -m
 
 # Factory
-php artisan make:factory ModelNameFactory
+make artisan make:factory ModelNameFactory
 
 # Seeder
-php artisan make:seeder ModelNameSeeder
+make artisan make:seeder ModelNameSeeder
 
 # Form Request
-php artisan make:request StoreModelRequest
+make artisan make:request StoreModelRequest
 
 # API Controller
-php artisan make:controller ModelController --api
+make artisan make:controller ModelController --api
 
 # Feature Test
-php artisan make:test ModelTest
+make artisan make:test ModelTest
 ```
 
 **Never use**: Manual file creation, copy-paste from other files

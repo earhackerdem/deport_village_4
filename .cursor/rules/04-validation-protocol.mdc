@@ -24,8 +24,7 @@ Two-layer validation is MANDATORY for all implementations.
 **Example Flow**:
 ```bash
 # Run seeders
-make shell
-php artisan db:seed --class=TaskSeeder
+make artisan db:seed --class=TaskSeeder
 
 # Verify data
 make sql

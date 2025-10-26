@@ -46,7 +46,7 @@ public function test_descriptive_name(): void
 
 - Minimum: 80%
 - Target: 90%+
-- Check: `php artisan test --coverage`
+- Check: `make test-coverage`
 
 ## Before Writing Tests
 

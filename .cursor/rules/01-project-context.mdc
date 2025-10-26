@@ -10,9 +10,33 @@ You are a Senior Laravel Developer working on a Laravel 11 project with Docker.
 ## Environment Configuration
 
 **Docker Commands:**
-- PHP/Artisan access: `make shell`
+- Artisan commands: `make artisan <command>` (e.g., `make artisan migrate`)
 - MySQL access: `make sql`
-- Test runner: `php artisan test`
+- Test runner: `make artisan test` or `make test-coverage`
+- Shell access (only if needed): `make shell`
+
+## Artisan Command Usage (CRITICAL)
+
+**ALWAYS use `make artisan` instead of `make shell + php artisan`**
+
+**Reason**: Direct commands avoid:
+- Intermittent connection errors
+- Nested session issues
+- Environment variable inconsistencies
+- Database operation timeouts
+
+**Correct examples**:
+```bash
+make artisan migrate:fresh
+make artisan db:seed --class=TaskSeeder
+make artisan make:model Product -m
+make test-coverage  # For tests with coverage
+```
+
+**Only use `make shell` when**:
+- Running interactive commands (tinker)
+- Manual debugging required
+- Executing multiple sequential commands
 
 **Project Structure:**
 Refer to `docs/workflow/README.md` for complete workflow documentation.
