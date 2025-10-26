@@ -1,0 +1,71 @@
+---
+description: Jira lifecycle management and status transitions for all tasks
+alwaysApply: true
+---
+
+# Jira Integration Protocol
+
+All tasks must follow proper Jira lifecycle management.
+
+**📚 Full Documentation**: `docs/workflow/jira-integration.md`
+
+## Status Transitions (MANDATORY)
+```
+Backlog
+    ↓
+[Fetch Task] → "En Progreso" (during analysis)
+    ↓
+[User Confirms] → "En Curso" (during implementation)
+    ↓
+[PR Created] → "En Revisión" (after integration)
+```
+
+## Task Selection
+
+**Always fetch**: Highest priority task assigned to you
+**Use Jira MCP**: Query for tasks with proper filters
+
+## Status Update Points
+
+### 1. En Progreso (Analysis Phase)
+**When**: After fetching task, before presenting plan
+**Action**: Update Jira status
+
+### 2. En Curso (Implementation Phase)
+**When**: After receiving user confirmation to proceed
+**Action**: Update Jira status
+
+### 3. En Revisión (Integration Phase)
+**When**: After creating PR
+**Action**: Update Jira with complete summary + change status
+
+## Jira Comment Template
+
+When moving to "En Revisión", add comment with:
+```markdown
+## Implementation Summary
+[Brief description of what was implemented]
+
+## Technical Details
+- Test Coverage: X%
+- Tests Added: X feature tests, Y unit tests
+- Files Created: [list]
+
+## Links
+- PR: [link]
+- Postman Collection: [link]
+
+## Validation
+✅ All tests passing
+✅ Fixtures validated in database
+✅ End-to-end testing completed
+✅ Coverage >80%
+```
+
+## Integration with Workflow
+
+- **Phase 1**: Update to "En Progreso"
+- **Phase 2**: Update to "En Curso" (after confirmation)
+- **Phase 4**: Comment + Update to "En Revisión"
+
+**See complete workflow**: `docs/workflow/README.md`

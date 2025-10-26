@@ -1,0 +1,77 @@
+---
+alwaysApply: true
+---
+# Validation Protocol
+
+Two-layer validation is MANDATORY for all implementations.
+
+**📚 Full Documentation**: `docs/workflow/phase-3-validation.md`
+**📚 Quick Reference**: 
+- `docs/quick-reference/mysql-queries.md`
+- `docs/quick-reference/curl-templates.md`
+
+## Layer 1: Fixture Validation
+
+**Purpose**: Verify test data generation works correctly
+
+**Process**:
+1. Run migrations and seeders
+2. Access MySQL: `make sql`
+3. Execute queries to verify data
+
+**Templates**: See `docs/quick-reference/mysql-queries.md`
+
+**Example Flow**:
+```bash
+# Run seeders
+make shell
+php artisan db:seed --class=TaskSeeder
+
+# Verify data
+make sql
+SELECT COUNT(*) FROM tasks;  -- Should match expected count
+SELECT * FROM tasks LIMIT 5;  -- Verify structure
+```
+
+## Layer 2: End-to-End Validation
+
+**Purpose**: Verify API operations persist correctly
+
+**Process**:
+1. Execute cURL for each endpoint
+2. Show request + response
+3. Access MySQL again
+4. Verify persistence
+5. Compare: before vs after
+
+**Templates**: See `docs/quick-reference/curl-templates.md`
+
+**Example Flow**:
+```bash
+# Test API
+curl -X POST http://localhost/api/tasks \
+  -H "Content-Type: application/json" \
+  -d '{"title": "Test", "status": "pendiente"}'
+
+# Verify in database
+make sql
+SELECT * FROM tasks WHERE title = 'Test';
+```
+
+## Why Both Layers?
+
+**Layer 1 (Fixtures)**: 
+- Isolates factory/seeder issues
+- Validates test data quality
+
+**Layer 2 (E2E)**:
+- Validates full stack (routes → controller → DB)
+- Confirms real-world usage works
+
+**Never skip either layer**. If short on time, reduce scope of testing, but always validate both layers for implemented features.
+
+## Complete Examples
+
+For detailed validation scenarios, see:
+- `docs/workflow/phase-3-validation.md`
+- `docs/examples/validation-examples.md`

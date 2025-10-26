@@ -1,0 +1,160 @@
+---
+description: Code generation standards using artisan commands for PHP files
+globs: ["*.php", "app/**/*.php", "database/**/*.php"]
+alwaysApply: false
+---
+
+# Code Generation Standards
+
+NEVER create files manually. Always use artisan commands.
+
+**📚 Quick Reference**: `docs/quick-reference/artisan-commands.md`
+**📚 Examples**: `docs/examples/` (all files)
+
+## Mandatory Artisan Commands
+```bash
+# Model + Migration
+php artisan make:model ModelName -m
+
+# Factory
+php artisan make:factory ModelNameFactory
+
+# Seeder
+php artisan make:seeder ModelNameSeeder
+
+# Form Request
+php artisan make:request StoreModelRequest
+
+# API Controller
+php artisan make:controller ModelController --api
+
+# Feature Test
+php artisan make:test ModelTest
+```
+
+**Never use**: Manual file creation, copy-paste from other files
+
+## Code Patterns
+
+### Models
+**Reference**: `docs/examples/model-examples.md`
+```php
+protected $fillable = ['field1', 'field2'];
+
+// Casts
+protected $casts = [
+    'is_active' => 'boolean',
+    'published_at' => 'datetime',
+];
+
+// Relationships
+public function relatedModel()
+{
+    return $this->belongsTo(RelatedModel::class);
+}
+```
+
+### Migrations
+```php
+Schema::create('table_name', function (Blueprint $table) {
+    $table->id();
+    $table->string('title');
+    $table->text('description')->nullable();
+    $table->string('status')->default('pendiente');
+    $table->timestamps();
+});
+```
+
+### Factories
+**Reference**: `docs/examples/factory-examples.md`
+```php
+public function definition(): array
+{
+    return [
+        'title' => fake()->sentence(),
+        'description' => fake()->paragraph(),
+        'status' => fake()->randomElement(['pendiente', 'en progreso', 'completada']),
+    ];
+}
+```
+
+### Seeders
+```php
+public function run(): void
+{
+    ModelName::factory()->count(20)->create();
+}
+```
+
+### Form Requests
+**Reference**: `docs/examples/request-examples.md`
+```php
+public function authorize(): bool
+{
+    return true;
+}
+
+public function rules(): array
+{
+    return [
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'status' => 'sometimes|in:pendiente,en progreso,completada',
+    ];
+}
+```
+
+### API Controllers
+**Reference**: `docs/examples/controller-examples.md`
+**API Design**: `docs/standards/api-design.md`
+```php
+public function index()
+{
+    return ModelName::all();
+}
+
+public function store(StoreModelRequest $request)
+{
+    $model = ModelName::create($request->validated());
+    return response()->json($model, 201);
+}
+
+public function show(ModelName $model)
+{
+    return response()->json($model);
+}
+
+public function update(UpdateModelRequest $request, ModelName $model)
+{
+    $model->update($request->validated());
+    return response()->json($model);
+}
+
+public function destroy(ModelName $model)
+{
+    $model->delete();
+    return response()->json(null, 204);
+}
+```
+
+## Quality Standards
+
+**Reference**: `docs/standards/code-style.md`
+
+- PSR-12 compliant
+- SOLID principles
+- Laravel conventions
+- Meaningful variable/method names
+- Type hints everywhere
+- Return type declarations
+- DocBlocks for complex logic
+
+## Before Writing Code
+
+1. Read relevant example in `docs/examples/`
+2. Use artisan command to generate file
+3. Follow pattern from documentation
+4. Write test first (TDD)
+5. Implement following standards
+
+**Complete reference**: `docs/standards/` for all quality requirements
