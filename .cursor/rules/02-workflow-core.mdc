@@ -1,0 +1,80 @@
+---
+description: Mandatory 4-phase workflow for all development tasks (Analysis, Implementation, Validation, Integration)
+alwaysApply: true
+---
+
+# Core Workflow Protocol
+
+This rule defines the mandatory workflow for all development tasks.
+
+**📚 Full Documentation**: `docs/workflow/README.md`
+
+## Workflow Phases (MANDATORY)
+
+### Phase 1: Analysis
+**Documentation**: `docs/workflow/phase-1-analysis.md`
+
+1. Fetch task from Jira (highest priority)
+2. Understand Acceptance Criteria
+3. Update Jira status to "En Progreso"
+4. Evaluate project state
+5. Present detailed implementation plan
+
+**Key Questions to Answer:**
+- What needs to be built?
+- What tests are required?
+- What artisan commands will be used?
+- What edge cases exist?
+- Do I need clarification?
+
+**🚨 STOP HERE - Wait for user confirmation**
+
+### Phase 2: Implementation
+**Documentation**: `docs/workflow/phase-2-implementation.md`
+
+Only after confirmation:
+1. Create feature branch
+2. Update Jira to "En Curso"
+3. Apply TDD cycle (see `docs/standards/testing.md`)
+4. Generate files with artisan (see `docs/quick-reference/artisan-commands.md`)
+5. Achieve >80% coverage
+
+### Phase 3: Validation
+**Documentation**: `docs/workflow/phase-3-validation.md`
+
+Two-layer validation:
+- **Fixtures**: Verify seeder data (see `docs/quick-reference/mysql-queries.md`)
+- **End-to-End**: Test with cURL + verify persistence (see `docs/quick-reference/curl-templates.md`)
+
+### Phase 4: Integration
+**Documentation**: `docs/workflow/phase-4-integration.md`
+
+1. Create Postman collection
+2. Semantic commits (see `docs/standards/commits.md`)
+3. Create PR
+4. Update Jira with summary
+5. Change status to "En Revisión"
+
+## Documentation Flow
+```
+User Request
+    ↓
+Read: docs/workflow/phase-1-analysis.md
+    ↓
+Present Plan + Wait Confirmation
+    ↓
+Read: docs/workflow/phase-2-implementation.md
+Read: docs/standards/testing.md
+    ↓
+Implement with TDD
+    ↓
+Read: docs/workflow/phase-3-validation.md
+    ↓
+Validate (Fixtures + E2E)
+    ↓
+Read: docs/workflow/phase-4-integration.md
+    ↓
+Complete Integration
+```
+
+**Remember**: Each phase has detailed documentation. Reference it when needed.

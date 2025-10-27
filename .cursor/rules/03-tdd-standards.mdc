@@ -1,0 +1,70 @@
+---
+description: TDD standards with AAA pattern for test files
+globs: ["tests/**/*.php"]
+alwaysApply: false
+---
+
+# TDD Standards
+
+All code must follow Test-Driven Development with the AAA pattern.
+
+**📚 Full Documentation**: `docs/standards/testing.md`
+**📚 Examples**: `docs/examples/test-examples.md`
+
+## TDD Cycle (MANDATORY)
+```
+🔴 RED: Write failing test first
+    ↓
+🟢 GREEN: Minimum code to pass
+    ↓
+🔵 REFACTOR: Improve without breaking tests
+    ↓
+Repeat
+```
+
+## AAA Pattern (REQUIRED)
+
+Every test must follow Arrange-Act-Assert:
+```php
+public function test_descriptive_name(): void
+{
+    // Arrange: Setup
+    $data = ['field' => 'value'];
+    
+    // Act: Execute
+    $response = $this->postJson('/api/endpoint', $data);
+    
+    // Assert: Verify
+    $response->assertStatus(201);
+    $this->assertDatabaseHas('table', $data);
+}
+```
+
+**See complete examples in**: `docs/examples/test-examples.md`
+
+## Coverage Requirements
+
+- Minimum: 80%
+- Target: 90%+
+- Check: `make test-coverage`
+
+## Before Writing Tests
+
+1. Read: `docs/standards/testing.md` for patterns
+2. Read: `docs/examples/test-examples.md` for templates
+3. Write test following AAA
+4. Run test (should fail - RED)
+5. Implement minimum code (GREEN)
+6. Refactor (BLUE)
+
+## Test Naming Convention
+```
+test_{action}_{condition}_{expected_result}
+
+Examples:
+- test_store_with_valid_data_creates_resource
+- test_store_with_invalid_data_returns_422
+- test_update_without_permission_returns_403
+```
+
+For more details, always reference `docs/standards/testing.md`.
